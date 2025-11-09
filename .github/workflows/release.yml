@@ -1,0 +1,21 @@
+name: Release
+on:
+  push:
+    tags: ['v*.*.*']
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build per-doc archives
+        shell: pwsh
+        run: |
+          ./scripts/package/per-doc-archive.ps1 -Source "./templates" -OutDir "./_release"
+      - name: SHA256 manifest
+        run: |
+          find _release -type f -print0 | xargs -0 sha256sum > _release/SHA256SUMS.txt
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets
+          path: _release

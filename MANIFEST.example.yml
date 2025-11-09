@@ -1,0 +1,10 @@
+release: v0.1.0
+date: 2025-11-09
+artifacts:
+  - path: _release/<doc>_BUYER_ONLY.zip
+    files:
+      - core.docx
+      - sample.docx
+      - quick_start.docx
+      - README.txt
+      - LICENSE.txt

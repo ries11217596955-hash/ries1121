@@ -1,0 +1,4 @@
+_release/
+.DS_Store
+Thumbs.db
+*.log
