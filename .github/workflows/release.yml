@@ -1,4 +1,4 @@
-name: Release
+﻿name: Release
 on:
   push:
     tags: ['v*.*.*']
@@ -11,11 +11,16 @@ jobs:
         shell: pwsh
         run: |
           ./scripts/package/per-doc-archive.ps1 -Source "./templates" -OutDir "./_release"
-      - name: SHA256 manifest
+      - name: Generate SHA256 (skip if empty)
         run: |
-          find _release -type f -print0 | xargs -0 sha256sum > _release/SHA256SUMS.txt
+          if compgen -G "_release/*" > /dev/null; then
+            find _release -type f -print0 | xargs -0 sha256sum > _release/SHA256SUMS.txt
+          else
+            echo "No artifacts to hash" > _release/EMPTY.txt
+          fi
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: release-assets
           path: _release
+          if-no-files-found: warn
